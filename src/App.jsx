@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import LandingPage from './components/LandingPage'
+import AdminDashboard from './components/AdminDashboard'
 
 function App() {
   // ─── View state: 'landing' | 'login' | 'dashboard' ───────────────────────
@@ -44,29 +45,38 @@ function App() {
     setView('landing')
   }
 
-  // ─── DASHBOARD (EXISTING — tidak diubah) ─────────────────────────────────
-  if (view === 'dashboard' && user) {
-    const namaPengguna = user === 'admin' ? 'Admin' : 'Petugas'
-
-    return (
-      <div className="app-shell">
-        <aside className="sidebar">
-          <div className="logo">LaporPak</div>
-          <nav className="sidebar-menu">
-            <a href="#dashboard" className="menu-item active">Dashboard</a>
-            <button type="button" className="menu-item logout-button" onClick={handleLogout}>
-              Logout
-            </button>
-          </nav>
-        </aside>
-
-        <main className="dashboard">
-          <h1>Halo, {namaPengguna}</h1>
-          <p>Selamat datang di Dashboard {namaPengguna} LaporPak.</p>
-        </main>
-      </div>
-    )
+ if (view === 'dashboard' && user) {
+  if (user === 'admin') {
+    return <AdminDashboard onLogout={handleLogout} />
   }
+
+  return (
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="logo">LaporPak</div>
+
+        <nav className="sidebar-menu">
+          <a href="#dashboard" className="menu-item active">
+            Dashboard
+          </a>
+
+          <button
+            type="button"
+            className="menu-item logout-button"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        </nav>
+      </aside>
+
+      <main className="dashboard">
+        <h1>Halo, Petugas</h1>
+        <p>Selamat datang di Dashboard Petugas LaporPak.</p>
+      </main>
+    </div>
+  )
+}
 
   // ─── LOGIN (EXISTING — tidak diubah) ──────────────────────────────────────
   if (view === 'login') {
