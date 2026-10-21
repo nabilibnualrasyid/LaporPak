@@ -1,7 +1,15 @@
 import { useState } from 'react'
 import './App.css'
+import LandingPage from './components/LandingPage'
 
 function App() {
+  // ─── View state: 'landing' | 'login' | 'dashboard' ───────────────────────
+  // 'landing'   → halaman pertama (LandingPage)
+  // 'login'     → form login existing (tidak diubah)
+  // 'dashboard' → dashboard setelah login berhasil (tidak diubah)
+  const [view, setView] = useState('landing')
+
+  // ─── Login state (EXISTING — tidak diubah) ───────────────────────────────
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -21,6 +29,7 @@ function App() {
 
     if (akunDitemukan) {
       setUser(akunDitemukan.username)
+      setView('dashboard')
       setError('')
       return
     }
@@ -32,9 +41,11 @@ function App() {
     setUser(null)
     setUsername('')
     setPassword('')
+    setView('landing')
   }
 
-  if (user) {
+  // ─── DASHBOARD (EXISTING — tidak diubah) ─────────────────────────────────
+  if (view === 'dashboard' && user) {
     const namaPengguna = user === 'admin' ? 'Admin' : 'Petugas'
 
     return (
@@ -57,42 +68,69 @@ function App() {
     )
   }
 
-  return (
-    <main className="login-page">
-      <section className="login-card">
-        <p className="eyebrow">LAPORPAK</p>
-        <h1>Masuk ke akun</h1>
-        <p className="login-description">Silakan masuk untuk melanjutkan ke dashboard.</p>
+  // ─── LOGIN (EXISTING — tidak diubah) ──────────────────────────────────────
+  if (view === 'login') {
+    return (
+      <main className="login-page">
+        <section className="login-card">
+          <p className="eyebrow">LAPORPAK</p>
+          <h1>Masuk ke akun</h1>
+          <p className="login-description">Silakan masuk untuk melanjutkan ke dashboard.</p>
 
-        <form onSubmit={handleLogin}>
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            placeholder="Masukkan username"
-            required
-          />
+          <form onSubmit={handleLogin}>
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              placeholder="Masukkan username"
+              required
+            />
 
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="Masukkan password"
-            required
-          />
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Masukkan password"
+              required
+            />
 
-          {error && <p className="error-message">{error}</p>}
+            {error && <p className="error-message">{error}</p>}
 
-          <button type="submit" className="login-button">
-            Login
+            <button type="submit" className="login-button">
+              Login
+            </button>
+          </form>
+
+          {/* Kembali ke landing page */}
+          <button
+            type="button"
+            onClick={() => { setError(''); setView('landing') }}
+            style={{
+              display: 'block',
+              marginTop: '16px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#607D8B',
+              fontSize: '14px',
+              padding: '0',
+              fontFamily: 'inherit',
+            }}
+          >
+            ← Kembali ke Beranda
           </button>
-        </form>
-      </section>
-    </main>
+        </section>
+      </main>
+    )
+  }
+
+  // ─── LANDING PAGE ─────────────────────────────────────────────────────────
+  return (
+    <LandingPage onGoToLogin={() => setView('login')} />
   )
 }
 
