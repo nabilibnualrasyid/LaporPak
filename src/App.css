@@ -193,4 +193,39 @@ button {
   .dashboard {
     padding: 36px 22px;
   }
+  
+/* Responsivitas halaman login dan layout umum */
+@media (max-width: 768px) {
+  .login-page {
+    padding: 20px;
+  }
+
+  .login-card {
+    max-width: 460px;
+    padding: 32px 26px;
+  }
+
+  .dashboard {
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-page {
+    padding: 16px;
+  }
+
+  .login-card {
+    padding: 26px 20px;
+  }
+
+  .login-card h1 {
+    font-size: 26px;
+  }
+
+  .dashboard {
+    padding: 26px 16px;
+  }
+}
+
 }
