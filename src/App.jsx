@@ -4,7 +4,9 @@ import './App.css'
 import LandingPage from './components/LandingPage'
 import AdminRoutes from './components/admin/AdminRoutes'
 import PetugasRoutes from './components/petugas/PetugasRoutes'
+import PenggunaRoutes from './components/pengguna/PenggunaRoutes'
 import Login from './components/Login'
+import ScanQR from './pages/pengguna/ScanQR'
 
 const laporanAwal = [
   {
@@ -55,10 +57,32 @@ function App() {
   // Satu sumber data laporan untuk admin dan petugas.
   const [laporan, setLaporan] = useState(bacaLaporan)
 
+  // Laporan khusus pengguna (terpisah dari laporan admin/petugas)
+  const [laporanPengguna, setLaporanPengguna] = useState(() => {
+    try {
+      const saved = localStorage.getItem('laporpak_laporan_pengguna')
+      return saved ? JSON.parse(saved) : []
+    } catch { return [] }
+  })
+
+  function handleLogoutPengguna() {
+    setView('landing')
+  }
+
   // Simpan perubahan laporan ke localStorage.
   useEffect(() => {
     localStorage.setItem('laporpak_laporan', JSON.stringify(laporan))
   }, [laporan])
+
+  useEffect(() => {
+    try {
+      // Simpan hanya data yang bisa di-serialize (tanpa File object)
+      const serializable = laporanPengguna.map(({ fotoPreview, ...rest }) => rest)
+      localStorage.setItem('laporpak_laporan_pengguna', JSON.stringify(serializable))
+    } catch {
+      // localStorage penuh atau error lain — abaikan
+    }
+  }, [laporanPengguna])
 
   function handleLogin(event) {
     event.preventDefault()
@@ -129,7 +153,26 @@ function App() {
   )
 } 
 
-  return <LandingPage onGoToLogin={() => setView('login')} />
+  if (view === 'scan-qr') {
+    return (
+      <ScanQR
+        onBack={() => setView('landing')}
+        onScanSuccess={() => setView('user-dashboard')}
+      />
+    )
+  }
+
+  if (view === 'user-dashboard') {
+    return (
+      <PenggunaRoutes
+        onLogout={handleLogoutPengguna}
+        laporanPengguna={laporanPengguna}
+        setLaporanPengguna={setLaporanPengguna}
+      />
+    )
+  }
+
+  return <LandingPage onGoToLogin={() => setView('login')} onGoToUser={() => setView('scan-qr')} />
 }
 
 export default App

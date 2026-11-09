@@ -17,6 +17,9 @@ function AdminRoutes({ onLogout, laporan, setLaporan }) {
 
   const [pilihanLaporan, setPilihanLaporan] = useState(null)
   const [form, setForm] = useState({
+    verifikasi: 'Menunggu verifikasi',
+    alasanPenolakan: '',
+    statusPenanganan: 'Menunggu verifikasi',
     kerusakan: 'Sedang',
     dampak: 'Kegiatan belajar',
     prioritas: 'Menengah',
@@ -28,6 +31,10 @@ function AdminRoutes({ onLogout, laporan, setLaporan }) {
     setErrors({})
     setPilihanLaporan(item)
     setForm({
+      // Pertahankan verifikasi & status yang sudah tersimpan di item, atau default
+      verifikasi: item.verifikasi || 'Menunggu verifikasi',
+      alasanPenolakan: item.alasanPenolakan || '',
+      statusPenanganan: item.status || 'Menunggu verifikasi',
       kerusakan: item.kerusakan,
       dampak: item.dampak,
       prioritas: item.prioritas,
@@ -37,8 +44,25 @@ function AdminRoutes({ onLogout, laporan, setLaporan }) {
 
   function validasiForm() {
     const hasil = {}
-    const nama = form.teknisi.trim()
 
+    // Validasi alasan penolakan — wajib jika status Ditolak
+    if (form.verifikasi === 'Ditolak' && !form.alasanPenolakan.trim()) {
+      hasil.alasanPenolakan = 'Alasan penolakan wajib diisi.'
+    }
+
+    // Validasi status penanganan tidak boleh maju jika belum terverifikasi
+    const statusMaju = ['Menunggu Penanganan', 'Dalam Penanganan', 'Selesai']
+    if (form.verifikasi !== 'Terverifikasi' && statusMaju.includes(form.statusPenanganan)) {
+      hasil.statusPenanganan = 'Laporan harus terverifikasi terlebih dahulu.'
+    }
+
+    // Validasi status tidak boleh dilanjutkan jika laporan ditolak
+    if (form.verifikasi === 'Ditolak' && form.statusPenanganan !== 'Menunggu verifikasi') {
+      hasil.statusPenanganan = 'Laporan yang ditolak tidak dapat dilanjutkan penanganannya.'
+    }
+
+    // Validasi nama teknisi (sama seperti existing)
+    const nama = form.teknisi.trim()
     if (nama !== '') {
       if (nama.length < 3) {
         hasil.teknisi = 'Nama petugas minimal 3 karakter.'
@@ -66,17 +90,15 @@ function AdminRoutes({ onLogout, laporan, setLaporan }) {
           return item
         }
 
-        const sudahDitugaskan = form.teknisi.trim() !== ''
-        const statusBaru =
-          sudahDitugaskan && item.status === 'Menunggu verifikasi'
-            ? 'Dalam penanganan'
-            : item.status
-
         return {
           ...item,
-          ...form,
+          verifikasi: form.verifikasi,
+          alasanPenolakan: form.verifikasi === 'Ditolak' ? form.alasanPenolakan.trim() : '',
+          status: form.statusPenanganan,
+          kerusakan: form.kerusakan,
+          dampak: form.dampak,
+          prioritas: form.prioritas,
           teknisi: form.teknisi.trim(),
-          status: statusBaru,
         }
       }),
     )

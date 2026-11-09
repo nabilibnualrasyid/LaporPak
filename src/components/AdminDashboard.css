@@ -445,6 +445,49 @@
   box-shadow: 0 12px 40px rgba(38, 50, 56, 0.18);
 }
 
+/* Modifier untuk konten panjang — sudah tercakup oleh max-height + overflow-y */
+.admin-modal--scrollable {
+  max-height: calc(100vh - 32px);
+}
+
+/* Pemisah antar grup field di dalam modal */
+.admin-modal-section-label {
+  margin: 18px 0 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid #E0E5E8;
+  color: var(--admin-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+/* Textarea di dalam modal (alasan penolakan) */
+.admin-modal textarea {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid #CFD8DC;
+  border-radius: 7px;
+  background: white;
+  color: var(--admin-text);
+  font: inherit;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.55;
+  box-sizing: border-box;
+}
+
+.admin-modal textarea:focus {
+  outline: 2px solid #B0BEC5;
+  border-color: var(--admin-primary);
+}
+
+.admin-modal textarea.admin-input-error {
+  border-color: #B23B32;
+}
+
 .admin-modal-heading {
   display: flex;
   align-items: flex-start;

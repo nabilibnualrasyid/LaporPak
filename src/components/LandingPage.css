@@ -221,7 +221,7 @@
 .lp-navbar__links {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 6px;
 }
 
 /* Nav link — bukan button default, sudah di-reset di .lp-root button */
@@ -234,13 +234,18 @@
   font-size: 16px;
   font-weight: 500;
   color: var(--storm-muted);
-  padding: 10px 14px;
+  padding: 10px 16px;
   line-height: 1;
   transition: color var(--lp-transition), background var(--lp-transition);
 }
 .lp-nav-link:hover {
   color: var(--storm-dark);
   background: var(--storm-background);
+}
+
+/* Pisahkan tombol Login Admin dari nav link biasa */
+.lp-navbar__links .lp-btn--sm {
+  margin-left: 10px;
 }
 
 /* Hamburger */
@@ -609,10 +614,6 @@
   margin: 0;
   flex: 1;
 }
-
-/* ═══════════════════════════════════════════════════════
-   CTA SECTION (background gelap)
-═══════════════════════════════════════════════════════ */
 .lp-cta {
   background: var(--storm-dark);
   padding: 88px 0;

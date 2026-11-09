@@ -115,7 +115,7 @@ function IconX() {
 }
 
 // ─── Komponen ──────────────────────────────────────────────────────────────────
-function LandingPage({ onGoToLogin }) {
+function LandingPage({ onGoToLogin, onGoToUser }) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -190,7 +190,7 @@ function LandingPage({ onGoToLogin }) {
             </p>
             <p className="lp-hero__sub">Untuk Mahasiswa, Dosen, Laboran, dan Tendik</p>
             <div className="lp-hero__actions">
-              <button className="lp-btn lp-btn--primary lp-btn--lg" onClick={() => scrollTo('akses')}>
+              <button className="lp-btn lp-btn--primary lp-btn--lg" onClick={onGoToUser}>
                 <IconQr /> Laporkan Kerusakan
               </button>
               <button className="lp-btn lp-btn--outline lp-btn--lg" onClick={onGoToLogin}>
@@ -298,7 +298,7 @@ function LandingPage({ onGoToLogin }) {
               <p className="lp-role-card__desc">
                 Laporkan kerusakan fasilitas dan pantau perkembangan penanganannya.
               </p>
-              <button className="lp-btn lp-btn--primary lp-btn--full">
+              <button className="lp-btn lp-btn--primary lp-btn--full" onClick={onGoToUser}>
                 <IconQr /> Akses Pengguna
               </button>
             </div>
@@ -325,7 +325,7 @@ function LandingPage({ onGoToLogin }) {
           <p className="lp-cta__desc">
             Laporkan melalui LaporPak dan bantu menciptakan lingkungan kampus yang lebih nyaman.
           </p>
-          <button className="lp-btn lp-btn--white lp-btn--lg" onClick={() => scrollTo('akses')}>
+          <button className="lp-btn lp-btn--white lp-btn--lg" onClick={onGoToUser}>
             <IconFilePlus /> Buat Laporan
           </button>
         </div>
